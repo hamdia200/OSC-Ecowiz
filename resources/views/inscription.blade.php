@@ -98,38 +98,55 @@
     </div> -->
     <div class="container">
         <div class="form-box">
-            <form action="" method="POST">
-            <p class="register">Authentification</p>
-                <div class="form-group">
-                    <label for="nom">Nom</label>
-                    <input type="text" name="nom">
-                </div>
+        <form action="{{ route('inscription') }}" method="POST">
+    @csrf
 
-                <div class="form-group">
-                    <label for="prenom">Prénom</label>
-                    <input type="text" name="prenom">
-                </div>
+    <div class="form-group">
+        <label for="nom">Nom</label>
+        <input type="text" name="nom" value="{{ old('nom') }}" required>
+        @error('nom')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email">
-                </div>
+    <div class="form-group">
+        <label for="prenom">Prénom</label>
+        <input type="text" name="prenom" value="{{ old('prenom') }}" required>
+        @error('prenom')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
 
-                <div class="form-group">
-                    <label for="mot_de_passe">Mot de passe</label>
-                    <input type="password" name="mot_de_passe">
-                </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" value="{{ old('email') }}" required>
+        @error('email')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
 
-                <div class=" condition form-check d-flex justify-content-center mb-5">
-                    <input class="form-check-input me-2" type="checkbox" value="" id="form" />
-                    <label class="form-check-label" for="form">
-                        J'ai lu et j'accepte les <a href="#!" class="text-body"><u>conditions d'utilisation</u></a>
-                    </label>
-                </div>
-                <button type="submit" class="bouton">S'inscrire</button>
-                <p class="compte"> Avez-vous déjà un compte?<a href="login.blade.php"
-                    class="fw-bold text-body"><u>Se connecter</u></a></p>
-            </form>
+    <div class="form-group">
+        <label for="mot_de_passe">Mot de passe</label>
+        <input type="password" name="mot_de_passe" required>
+        @error('mot_de_passe')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="mot_de_passe_confirmation">Confirmation du mot de passe</label>
+        <input type="password" name="mot_de_passe_confirmation" required>
+    </div>
+
+    <div class="condition form-check d-flex justify-content-center mb-5">
+        <input class="form-check-input me-2" type="checkbox" value="" id="form">
+        <label class="form-check-label" for="form">
+            J'ai lu et j'accepte les <a href="#!" class="text-body"><u>conditions d'utilisation</u></a>
+        </label>
+    </div>
+    <button type="submit" class="bouton">S'inscrire</button>
+</form>
+
         </div>
     </div>
 

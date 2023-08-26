@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +25,7 @@ Route::get('/centrale', function () {
 Route::get('/accueil', function () {
     return view('accueil');
 });
-Route::get('/inscription', function () {
-    return view('inscription');
-});
+
 Route::get('/login', function () {
     return view('login');
 });
@@ -36,4 +36,22 @@ Route::get('/Surveillance', function () {
     return view('Surveillance');
 });
 
+Route::get('/inscription', [AuthController::class, 'showRegistrationForm'])->name('inscription.form');
+Route::post('/inscription', [AuthController::class, 'register'])->name('inscription.submit');
 
+Route::get('/connexion', function () {
+    return view('login');
+});  
+
+Route::get('/login', [AuthController::class, 'showLoginForm']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/logout', [AuthController::class, 'logout']);
+
+
+
+Route::get('/inscription', [AuthController::class, 'showRegistrationForm'])->name('inscription');
+Route::post('/inscription', [AuthController::class, 'register']);
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+
+Route::post('/login', [AuthController::class, 'login']);

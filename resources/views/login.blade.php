@@ -103,7 +103,9 @@
     <div class="container">
         <div class="form-box">
             <img src="{{asset('/image/key.png')}}" alt="" class="image">
-            <form action="" method="POST">
+            <form action="{{ route('login') }}" method="POST">
+                @csrf <!-- Ajout du jeton CSRF -->
+
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" name="email">
@@ -111,16 +113,16 @@
                 <br>
                 <div class="form-group">
                     <label for="mot_de_passe">Mot de passe</label>
-                    <input type="password" name="mot_de_passe">
+                    <input type="password" name="password">
                 </div>
-                    <div class="forget">
-                        <div class="inscrire">
-                            <a href="inscription.blade.php">S'inscrire</a>
-                        </div>
-                        <div class="abandon">
-                            <a href="#!">Mot de passe oublié?</a>
-                        </div>
+                <div class="forget">
+                    <div class="inscrire">
+                        <a href="{{ route('inscription') }}">S'inscrire</a>
                     </div>
+                    <div class="abandon">
+                        <a href="#!">Mot de passe oublié?</a>
+                    </div>
+                </div>
 
                 <button type="submit" class="btn btn-lg btn-primary">Se connecter</button>
             </form>
