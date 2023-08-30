@@ -29,7 +29,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 
-Route::get('/consommation', [ApiController::class, 'recevoirDonneesConsommation']);
+Route::post('/consommation', [ApiController::class, 'recevoirDonneesConsommation']);
+
 
 Route::post('/commande', [ApiController::class, 'envoyerCommande']);
 
