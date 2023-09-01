@@ -14,7 +14,7 @@ class CreateConsommationTable extends Migration
             $table->timestamp('date_time'); // Ajout de la colonne date et heure
             $table->timestamps();
 
-            $table->foreign('equipment_id')->references('id')->on('equipments');
+            //$table->foreign('equipment_id')->references('id')->on('equipments');
         });
     }
 
