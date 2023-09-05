@@ -18,7 +18,6 @@ class RegulationController extends Controller
         ];
 
         // Passer les données à la vue
-        dd($interrupteurs);
-        return view('regulation', compact('interrupteurs'));
+        return view('regulation', ['interrupteurs' => $interrupteurs]);
     }
 }

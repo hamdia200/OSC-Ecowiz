@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -29,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{dd($interrupteurs)}}
+                       
                         <!-- Utilisation de la boucle @foreach pour afficher les interrupteurs -->
                         @foreach($interrupteurs as $interrupteur)
                         <tr data-switch-id="{{ $loop->index + 1 }}">

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegulationController;
 
 
 /*
@@ -29,9 +30,7 @@ Route::get('/accueil', function () {
 Route::get('/login', function () {
     return view('login');
 });
-Route::get('/regulation', function () {
-    return view('regulation');
-});
+Route::get('/regulation',[RegulationController::class, 'index'])->name('regulation');
 Route::get('/Surveillance', function () {
     return view('Surveillance');
 });
@@ -60,9 +59,9 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/regulation', function () {
-    return view('regulation');
-})->name('regulation');
+// Route::get('/regulation', function () {
+//     return view('regulation');
+// })->name('regulation');
 
 
 Route::get('/accueil', function () {
