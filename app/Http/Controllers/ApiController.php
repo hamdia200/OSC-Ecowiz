@@ -14,25 +14,39 @@ class ApiController extends Controller
 
     public function envoyerCommande(Request $request)
     {
-        // Valider les données reçues de la requête
-        $data = $request->validate([
-            'contenu' => 'required|string', // Assurez-vous d'avoir le champ 'contenu' dans la requête
-        ]);
-
-        // Enregistrer la commande en base de données
-        $commande = new Commande();
-        $commande->contenu = $data['contenu'];
-        $commande->save();
-
-        // Envoi de la commande à l'ESP32 via une requête HTTP POST
-        $response = Http::post('http://adresse-de-votre-esp32', [
-            'contenu' => $data['contenu'],
-        ]);
-
-        // Vérifiez la réponse et effectuez des actions en fonction
-
-        return response()->json(['message' => 'Commande traitée avec succès']);
+        $command = $request->input('command');
+        $id = $request->input('id'); // Récupérez l'ID depuis la requête
+        $numero = ($command === 'on') ? 1 : 2; // Déterminez le numéro en fonction de la commande
+    
+        if ($command === 'on' || $command === 'off') {
+            // Sauvegarder la commande dans la base de données
+            $nouvelleCommande = new Commande();
+            $nouvelleCommande->command = $command;
+            $nouvelleCommande->save();
+    
+            // Préparez les données à envoyer à l'ESP32
+            $data = [
+                'id' => $id,
+                'numero' => $numero,
+            ];
+    
+            // Envoi de la commande à l'ESP32 via une requête HTTP POST
+            $response = Http::post('http://adresse-de-votre-esp32', [
+                'contenu' => json_encode($data),
+            ]);
+    
+            if ($response->successful()) {
+                return response()->json(['message' => 'Commande envoyée avec succès']);
+            } else {
+                // Gérer l'erreur si la requête n'a pas réussi
+                return response()->json(['message' => 'Erreur lors de l\'envoi de la commande'], 500);
+            }
+        } else {
+            // Commande non reconnue, gérer l'erreur
+            return response()->json(['message' => 'Commande non reconnue'], 400);
+        }
     }
+    
 
 
 public function recevoirDonneesConsommation(Request $request)
