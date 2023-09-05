@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
     <style>
-        body {
+       body {
         margin: 0;
         font-family: Arial, sans-serif;
         background-color: #C9D6F4;

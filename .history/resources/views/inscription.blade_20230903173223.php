@@ -9,98 +9,98 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #C9D6F4;
-    }
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #C9D6F4;
+        }
 
-    /* .header {
-        background-color: blue;
-        padding: 10px;
-    } */
+        /* .header {
+            background-color: blue;
+            padding: 10px;
+        } */
 
-    /* .image {
-        height: 50px;
-    } */
+        /* .image {
+            height: 50px;
+        } */
 
-    .container-inscription {
-        background-color: #C9D6F4;
-        max-width: 100%;
-        height: 90vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .register{
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: center;
-        margin-top: 40px;
-        margin-bottom: 40px;
-        font-size: 20px;
+        .container- {
+            background-color: #C9D6F4;
+            max-width: 100%;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .register{
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            font-size: 20px;
 
-    }
+        }
 
-    .form-box {
-        width: 80%;
-        max-width: 400px;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    }
+        .form-box {
+            width: 80%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
 
-    .bouton {
-        margin-top: 2rem;
-        font-size: 18px;
-        background-color: #93ABE1;
-        color: white;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        padding-left: 9rem;
-        padding-right: 9rem;
-        text-align: center;
-    }
+        .bouton {
+            margin-top: 2rem;
+            font-size: 18px;
+            background-color: #93ABE1;
+            color: white;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            padding-left: 9rem;
+            padding-right: 9rem;
+            text-align: center;
+        }
 
-    .form-group {
-        margin-bottom: 1rem;
-    }
+        .form-group {
+            margin-bottom: 1rem;
+        }
 
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
 
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    .condition{
-        display: flex;
-        margin-top: 2rem;
-    }
-    .compte{
-        margin-top: 3rem;
-        text-align: center;
-    }
-    .photo{
-        width: 100px;
-        height: 100px;
-        flex-shrink: 0;
-        background-color: #93ABE1;;
-        text-align: center;
-        border-radius: 30px;
-        border: 1px solid;
-        margin-left: auto;
-        margin-right: auto;
-        display: block;
-    }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .condition{
+            display: flex;
+            margin-top: 2rem;
+        }
+        .compte{
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .photo{
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+            background-color: #93ABE1;;
+            text-align: center;
+            border-radius: 30px;
+            border: 1px solid;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
 
     </style>
 </head>

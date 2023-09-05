@@ -9,68 +9,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-        body{
-            background-color: #C9D6F4;
-        }
-        .container{
-            background: var(--color, #C9D6F4);
-            background-color: #C9D6F4;
-            max-width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-        .text{
-            border-radius: 10px;
-            border-style: solid;
-            border-color: gray;
-            border-width: 0.1px;
-            text-align: center;
-            width: 599px;
-            height: 49px;
-            position: absolute;
-            margin-top: 10rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: white;
-            padding: 10px;
-            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
-            z-index: 2;
-        }
-        .charts{
-            width: 600px;
-            height: 571px;
-            flex-shrink: 0;
-            margin-top: 20rem;
-            padding-left: 20px;
-            padding-right: 20px;
-            left: 0;
-            top: 0;
-            position: absolute;
-            z-index: 1;
-        }
-        .content{
-
-
-        }
-        .time-range-button{
-            border-radius: 10px;
-            border: 1px solid rgba(23, 88, 236, 0.72);
-            background: var(--Color, #FFF);
-        }
-
-
-    </style>
-
 
 </head>
 <body>
 
 
-    <div class="container">
+    <div class="container-hist">
 
         <div class="content">
         <h1 class="text"style="font-size: 1.5rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">Energie(Kwh)</h1>

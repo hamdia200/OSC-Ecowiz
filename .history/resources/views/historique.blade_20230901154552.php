@@ -56,11 +56,7 @@
 
 
         }
-        .time-range-button{
-            border-radius: 10px;
-            border: 1px solid rgba(23, 88, 236, 0.72);
-            background: var(--Color, #FFF);
-        }
+        .
 
 
     </style>
