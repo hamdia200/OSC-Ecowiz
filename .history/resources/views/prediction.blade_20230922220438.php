@@ -7,7 +7,6 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css">
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="https://apexcharts.com/javascript-chart-demos"></script>
             <title>prediction</title>
 
 
@@ -53,7 +52,7 @@
                     </script>
 
 
-            </body>
+        </body>
 
 
 
