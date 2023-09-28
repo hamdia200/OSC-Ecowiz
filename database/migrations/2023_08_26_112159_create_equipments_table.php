@@ -12,8 +12,9 @@ class CreateEquipmentsTable extends Migration
     {
         Schema::create('equipments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('equipment_id');
             $table->string('name');
-            $table->string('type');
+            $table->boolean('etat'); // Utilisez BOOLEAN ou TINYINT(1) pour stocker 0 ou 1
             // Ajoutez d'autres colonnes nécessaires
             $table->timestamps();
         });

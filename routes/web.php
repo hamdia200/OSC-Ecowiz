@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NewEquipmentController;
 
 
 /*
@@ -29,9 +30,12 @@ Route::get('/accueil', function () {
 Route::get('/login', function () {
     return view('login');
 });
+// Utilisez le contrôleur pour la vue "regulation"
+
 Route::get('/regulation', function () {
-    return view('regulation');
+    return redirect('/equipments');
 });
+
 Route::get('/Surveillance', function () {
     return view('Surveillance');
 });
@@ -69,9 +73,9 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/regulation', function () {
-    return view('regulation');
-})->name('regulation');
+//Route::get('/regulation', function () {
+  //  return view('regulation');
+//})->name('regulation');
 
 
 Route::get('/accueil', function () {
@@ -97,3 +101,8 @@ Route::get('/profil', function () {
 Route::get('/notification', function () {
     return view('notification');
 })->name('notification');
+
+Route::get('/equipments', [NewEquipmentController::class, 'index'])->name('equipments');
+Route::post('/update-equipment-state', [NewEquipmentController::class, 'updateState']);
+
+

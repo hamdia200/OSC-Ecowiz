@@ -10,8 +10,7 @@ class CreateCommandeTable extends Migration
         Schema::create('commandes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('equipment_id');
-            $table->string('action');
-            $table->timestamp('date_time'); // Ajout de la colonne date et heure
+            $table->boolean('etat'); // Utilisez BOOLEAN ou TINYINT(1) pour stocker 0 ou 1
             $table->timestamps();
 
             $table->foreign('equipment_id')->references('id')->on('equipments');

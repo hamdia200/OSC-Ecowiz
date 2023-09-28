@@ -34,3 +34,10 @@ Route::post('/consommation', [ApiController::class, 'recevoirDonneesConsommation
 
 Route::post('/commande', [ApiController::class, 'envoyerCommande']);
 
+
+// Route pour mettre à jour l'équipement
+//Route::put('/equipments/{id}', [NewEquipmentController::class, 'update']);
+
+// Route pour supprimer l'équipement
+//Route::delete('/equipments/{id}', [NewEquipmentController::class, 'destroy']);
+
