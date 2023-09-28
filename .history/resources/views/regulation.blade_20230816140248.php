@@ -1,4 +1,0 @@
-@extends ("menu")
- <div>
-    
- </div>
