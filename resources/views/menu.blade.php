@@ -21,7 +21,7 @@
                 align-items: center;
                 justify-content: center;
                 background-color:#FFFFFF;
-                height: 100px;
+                height: 80px;
             }
 
             .menu-horizontal li {

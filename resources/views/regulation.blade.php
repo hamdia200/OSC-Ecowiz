@@ -451,7 +451,7 @@
 
                     // Envoyer une demande POST à l'ESP32 pour mettre à jour son état
                     $.ajax({
-                        url: 'http://adresse-de-lesp32/endpoint', // URL de l'ESP32 pour mettre à jour l'état
+                        url: 'http://192.168.137.6/', // URL de l'ESP32 pour mettre à jour l'état
                         method: 'POST',
                         data: {
                             equipmentId: equipmentId,
@@ -500,7 +500,7 @@
 
                         // Envoyez une demande POST à l'ESP32 pour mettre à jour son état
                         $.ajax({
-                            url: 'http://adresse-de-lesp32/endpoint',
+                            url: 'http://192.168.137.6/',
                             method: 'POST',
                             data: {
                                 equipmentId: equipmentId,

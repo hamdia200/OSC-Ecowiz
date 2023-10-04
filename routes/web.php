@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NewEquipmentController;
+use App\Http\Controllers\NewSurveillanceController;
+use App\Http\Controllers\DataGeneratorController;
 
 
 /*
@@ -36,9 +38,9 @@ Route::get('/regulation', function () {
     return redirect('/equipments');
 });
 
-Route::get('/Surveillance', function () {
-    return view('Surveillance');
-});
+//Route::get('/Surveillance', function () {
+  //  return view('Surveillance');
+//});
 
 Route::get('/historique', function () {
     return view('historique');
@@ -82,9 +84,9 @@ Route::get('/accueil', function () {
     return view('accueil');
 })->name('accueil');
 
-Route::get('/Surveillance', function () {
-    return view('Surveillance');
-})->name('Surveillance');
+//Route::get('/Surveillance', function () {
+  //  return view('Surveillance');
+//})->name('Surveillance');
 
 Route::get('/prediction', function () {
     return view('prediction');
@@ -106,3 +108,22 @@ Route::get('/equipments', [NewEquipmentController::class, 'index'])->name('equip
 Route::post('/update-equipment-state', [NewEquipmentController::class, 'updateState']);
 
 
+Route::get('/generate-random-data', [DataGeneratorController::class, 'generateRandomData']);
+
+
+
+Route::get('/surveillance', [NewSurveillanceController::class, 'index'])->name('Surveillance');
+Route::get('/fetch-realtime-consumption', [NewSurveillanceController::class, 'fetchRealtimeConsumption'])->name('surveillance.fetch');
+// routes/web.php
+
+Route::get('/fetch-initial-consumption', [NewSurveillanceController::class, 'fetchInitialConsumption'])->name('surveillance.fetch.initial');
+
+//Route::get('/fetch-chart-data', 'NewSurveillanceController@fetchChartData')->name('fetch-chart-data');
+Route::get('/fetch-chart-data', [NewSurveillanceController::class, 'fetchChartData'])->name('fetch-chart-data');
+
+
+Route::get('/historique-24h', [NewSurveillanceController::class, 'show24Hours']);
+Route::get('/historique/7jours', [NewSurveillanceController::class, 'show7Days']);
+Route::get('/historique/30jours', [NewSurveillanceController::class, 'show30Days']);
+Route::get('/historique/3mois', [NewSurveillanceController::class, 'show3Months']);
+Route::get('/historique/12mois', [NewSurveillanceController::class, 'show12Months']);
