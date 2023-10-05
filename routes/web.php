@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NewEquipmentController;
 use App\Http\Controllers\NewSurveillanceController;
 use App\Http\Controllers\DataGeneratorController;
-
+use App\Http\Controllers\AccueilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +25,9 @@ Route::get('/', function () {
 // Route::get('/centrale', function () {
 //     return view('centrale');
 // });
-Route::get('/accueil', function () {
-    return view('accueil');
-});
+//Route::get('/accueil', function () {
+    //return view('accueil');
+//});
 
 Route::get('/login', function () {
     return view('login');
@@ -80,9 +80,9 @@ Route::post('/login', [AuthController::class, 'login']);
 //})->name('regulation');
 
 
-Route::get('/accueil', function () {
-    return view('accueil');
-})->name('accueil');
+//Route::get('/accueil', function () {
+    //return view('accueil');
+//})->name('accueil');
 
 //Route::get('/Surveillance', function () {
   //  return view('Surveillance');
@@ -127,3 +127,5 @@ Route::get('/historique/7jours', [NewSurveillanceController::class, 'show7Days']
 Route::get('/historique/30jours', [NewSurveillanceController::class, 'show30Days']);
 Route::get('/historique/3mois', [NewSurveillanceController::class, 'show3Months']);
 Route::get('/historique/12mois', [NewSurveillanceController::class, 'show12Months']);
+
+Route::get('/accueil', [AccueilController::class, 'index'])->name('accueil');

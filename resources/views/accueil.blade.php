@@ -109,8 +109,12 @@
                     <div class="image-cercle">
                         <img src="{{asset('/image/cercle.png')}}" alt="">
                         <div class="chiffre">
-                            <h1>00kw</h1>
-                            <h1>0000FCFA</h1>
+                            <h1>
+                                {{ number_format($consommationTotale, 2) }} kWh
+                            </h1>
+                            <h1>
+                                {{ number_format($consommationTotale * 88) }} FCFA
+                            </h1>
                         </div>
 
                     </div>

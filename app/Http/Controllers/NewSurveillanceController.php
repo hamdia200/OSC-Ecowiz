@@ -15,7 +15,8 @@ class NewSurveillanceController extends Controller
         $chartData = $this->fetchChartData();
         $realtimeConsumptionData = $this->fetchRealtimeConsumption();
         // Dans votre contrôleur ou n'importe où dans l'application
-$consommationTotale = config('app.consumption_total');
+        $consommationTotale = config('app.consumption_total');
+
 
 
         
@@ -24,10 +25,22 @@ $consommationTotale = config('app.consumption_total');
         ->get();
 
     // Calcul du pourcentage de consommation pour chaque équipement
-    $consommationTotale = ($consommationT ->sum('average_power'))/1000;   
+        $consommationTotale = ($consommationT ->sum('average_power'))/1000;   
 
+        // Retournez les deux vues avec leurs données respectives
         return view('surveillance', compact('initialData', 'consommationTotale', 'realtimeConsumptionData', 'chartData'));
+           
 
+    }
+
+    private function calculateTotalConsumption()
+    {
+        // Calcul de la consommation totale
+        $consommationT = Consommation::selectRaw('equipment_id, AVG(value) as average_power')
+            ->groupBy('equipment_id')
+            ->get();
+        $consommationTotale = ($consommationT->sum('average_power')) / 1000;
+        return $consommationTotale;
     }
 
     public function fetchRealtimeConsumption()

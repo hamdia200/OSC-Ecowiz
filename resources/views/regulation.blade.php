@@ -569,24 +569,78 @@
                         <td>{{ $equipment->name }}</td>
                         <td>
                             <label class="switch">
-                            <input type="checkbox" id="switch{{ $equipment->id }}" class="equipment-switch" data-id="{{ $equipment->id }}" @if ($equipment->etat == 1) checked @endif>
-
+                                <input type="checkbox" id="switch{{ $equipment->id }}" class="equipment-switch" data-id="{{ $equipment->id }}" @if ($equipment->etat == 1) checked @endif>
                                 <span class="slider round"></span>
                             </label>
                         </td>
                         <td>
-                            <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="{{ $equipment->id }}">
+                            <a href="#editEmployeeModal{{ $equipment->id }}" class="edit" data-toggle="modal" data-id="{{ $equipment->id }}">
                                 <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                             </a>
-                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="{{ $equipment->id }}">
+                            <a href="#deleteEmployeeModal{{ $equipment->id }}" class="delete" data-toggle="modal" data-id="{{ $equipment->id }}">
                                 <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
                             </a>
                         </td>
                     </tr>
+
+                    <!-- Modal d'édition spécifique à chaque équipement -->
+                    <div id="editEmployeeModal{{ $equipment->id }}" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form id="editForm{{ $equipment->id }}">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Éditer l'équipement</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="name{{ $equipment->id }}">Nom de l'appareil</label>
+                                            <input type="text" class="form-control" id="name{{ $equipment->id }}" name="name" value="{{ $equipment->name }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="startTime{{ $equipment->id }}">Heure de début</label>
+                                            <input type="datetime-local" class="form-control" id="startTime{{ $equipment->id }}" name="startTime" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="endTime{{ $equipment->id }}">Heure de fin</label>
+                                            <input type="datetime-local" class="form-control" id="endTime{{ $equipment->id }}" name="endTime" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                                        <button type="button" class="btn btn-info" onclick="updateEquipment({{ $equipment->id }})">Sauvegarder</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Modal de suppression spécifique à chaque équipement -->
+                    <!-- Delete Modal HTML -->
+                    <div id="deleteEmployeeModal{{ $equipment->id }}" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form id="deleteForm{{ $equipment->id }}">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Supprimer l'équipement</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Êtes-vous sûr de vouloir supprimer cet équipement ?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                                        <button type="button" class="btn btn-danger" onclick="deleteEquipment({{ $equipment->id }})">Supprimer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 @endforeach
-
-
             </tbody>
+
         </table>
 
 
@@ -601,68 +655,35 @@
         <i class="fas fa-power-off"></i>
     </button>
 </div>
-<!-- Edit Modal HTML -->
-<div id="editEmployeeModal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form>
-				<div class="modal-header">
-					<h4 class="modal-title">Edit regulation</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div class="modal-body">
-                    <div class="form-group">
-						<label>Nom appareil</label>
-						<input type="text" placeholder="Switch"   class="form-control" required>
-					</div>
-					<div class="form-group">
-                        <label>Heure de début</label>
-                        <div class="d-flex align-items-center">
-                            <input type="datetime-local" class="form-control" required>
-                            <button class="btn btn-outline-danger ml-2" type="button" id="deleteStartTime">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-					<div class="form-group">
-                        <label>Heure de début</label>
-                        <div class="d-flex align-items-center">
-                            <input type="datetime-local" class="form-control" required>
-                            <button class="btn btn-outline-danger ml-2" type="button" id="deleteStartTime">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-info" value="Save">
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<!-- Delete Modal HTML -->
-<div id="deleteModal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form>
-				<div class="modal-header">
-					<h4 class="modal-title">Delete Regulation</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div class="modal-body">
-					<p>Etes-vous sur de supprimer ?</p>
-					<!-- <p class="text-warning"><small>This action cannot be undone.</small></p> -->
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-danger" value="Delete">
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+
+<!-- À l'intérieur de votre fichier JavaScript (par exemple, custom.js) -->
+<script>
+    // Fonction pour supprimer un équipement
+    function deleteEquipment(equipmentId) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet équipement ?")) {
+            // Envoyer une requête AJAX pour supprimer l'équipement
+            $.ajax({
+                url: '/equipments/' + equipmentId, // Remplacez '/equipments/' par l'URL appropriée pour la suppression
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}', // Ajoutez le jeton CSRF
+                },
+                success: function (response) {
+                    // Mettez à jour la page ou effectuez d'autres actions nécessaires
+                    alert(response.message); // Afficher un message de confirmation
+                    // Vous pouvez recharger la page ou mettre à jour la liste d'équipements, par exemple
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Gérer les erreurs en cas d'échec de la suppression
+                    alert('Erreur lors de la suppression de l\'équipement : ' + xhr.responseText);
+                }
+            });
+        }
+    }
+</script>
+
+
 </div>
 </body>
 </html>
