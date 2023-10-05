@@ -238,7 +238,7 @@
             updateChart();
 
             // Rafraîchissez le graphique lorsque vous récupérez de nouvelles données
-            setInterval(updateChart, 5000); // Mettez à jour toutes les 5 secondes (5000 ms)
+            setInterval(updateChart, 10000); // Mettez à jour toutes les 5 secondes (5000 ms)
 
             // Fonction pour générer des couleurs aléatoires
             function generateRandomColors(count) {
