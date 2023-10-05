@@ -21,7 +21,7 @@
                 align-items: center;
                 justify-content: center;
                 background-color:#FFFFFF;
-                height: 100px;
+                height: 80px;
             }
 
             .menu-horizontal li {
@@ -157,8 +157,8 @@
 
                     </li>
                     <li>
-                        <span class="menu-item @if(Request::is('regulation')) active @endif">
-                            <i class="fas fa-bolt @if(Request::is('regulation')) active-icon @endif"></i> <a href="{{route('regulation')}}"><span class="menu-text">Régulation d'éléctricité </span></a>
+                        <span class="menu-item @if(Request::is('equipments')) active @endif">
+                            <i class="fas fa-bolt @if(Request::is('equipments')) active-icon @endif"></i> <a href="{{route('equipments')}}"><span class="menu-text">Régulation d'éléctricité </span></a>
                         </span>
                     </li>
 
@@ -195,7 +195,7 @@
             <div id="mySidebar" class="sidebar">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
                 <a href="{{route('accueil')}}"><i class="fas fa-home"></i> <span>Accueil</span></a>
-                <a href="{{route('regulation')}}"><i class="fas fa-bolt"></i> <span>Régulation de l'électricité</span></a>
+                <a href="{{route('equipments')}}"><i class="fas fa-bolt"></i> <span>Régulation de l'électricité</span></a>
                 <a href="{{route('profil')}}"><i class="fas fa-user"></i> <span>Profil</span></a>
                 <a href="{{route('Surveillance')}}"><i class="fas fa-eye"></i> <span>Surveillance de données</span></a>
                 <a href="{{route('prediction')}}"><i class="fas fa-chart-line"></i> <span>Prédiction</span></a>

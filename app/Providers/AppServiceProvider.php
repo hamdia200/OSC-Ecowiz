@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Consommation;
+use App\Observers\ConsommationObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,5 +24,12 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Schema::defaultStringLength(191);
+        Consommation::observe(ConsommationObserver::class);
     }
+    
+
+
+
+    
+
 }

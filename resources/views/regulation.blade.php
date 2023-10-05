@@ -17,6 +17,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
     <script src="script.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <style>
         body {
@@ -425,7 +426,111 @@
     });
 </script>
 
-    </script>
+<script>
+    $(document).ready(function () {
+        // Récupérez le jeton CSRF à partir de la balise meta
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        $('.equipment-switch').change(function () {
+            console.log('Interrupteur individuel changé');
+            var equipmentId = $(this).data('id');
+            var newState = this.checked ? 1 : 0; // Nouvel état (1 pour activé, 0 pour désactivé)
+
+            // Envoyer la demande POST à Laravel pour mettre à jour l'état dans la base de données
+            $.ajax({
+                url: '/update-equipment-state', // URL de la route Laravel pour mettre à jour l'état dans la base de données
+                method: 'POST',
+                data: {
+                    equipmentId: equipmentId,
+                    newState: newState,
+                    _token: csrfToken // Ajoutez le jeton CSRF à la demande
+                },
+                success: function (response) {
+                    // Réponse du serveur après la mise à jour dans la base de données
+                    console.log(response);
+
+                    // Envoyer une demande POST à l'ESP32 pour mettre à jour son état
+                    $.ajax({
+                        url: 'http://192.168.137.6/', // URL de l'ESP32 pour mettre à jour l'état
+                        method: 'POST',
+                        data: {
+                            equipmentId: equipmentId,
+                            newState: newState
+                        },
+                        success: function (espResponse) {
+                            // Réponse de l'ESP32 après la mise à jour de l'état
+                            console.log(espResponse);
+                        },
+                        error: function (espXhr, espStatus, espError) {
+                            // Gestion des erreurs de communication avec l'ESP32
+                            console.error(espXhr.responseText);
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Gestion des erreurs de mise à jour dans la base de données
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        // Lorsque la case à cocher globale est changée
+        $('#selectAll').change(function () {
+            var isChecked = this.checked;
+
+            // Mettez à jour toutes les cases à cocher individuelles
+            $('table tbody input[type="checkbox"]').prop('checked', isChecked);
+
+            // Envoyez la demande POST à Laravel pour mettre à jour l'état dans la base de données
+            $('table tbody input[type="checkbox"]').each(function () {
+                var equipmentId = $(this).val();
+                var newState = isChecked ? 1 : 0;
+
+                $.ajax({
+                    url: '/update-equipment-state',
+                    method: 'POST',
+                    data: {
+                        equipmentId: equipmentId,
+                        newState: newState,
+                        _token: csrfToken // Ajoutez le jeton CSRF à la demande
+                    },
+                    success: function (response) {
+                        // Réponse du serveur
+                        console.log(response);
+
+                        // Envoyez une demande POST à l'ESP32 pour mettre à jour son état
+                        $.ajax({
+                            url: 'http://192.168.137.6/',
+                            method: 'POST',
+                            data: {
+                                equipmentId: equipmentId,
+                                newState: newState
+                            },
+                            success: function (espResponse) {
+                                // Réponse de l'ESP32 après la mise à jour de l'état
+                                console.log(espResponse);
+                            },
+                            error: function (espXhr, espStatus, espError) {
+                                // Gestion des erreurs de communication avec l'ESP32
+                                console.error(espXhr.responseText);
+                            }
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        // Gestion des erreurs de mise à jour dans la base de données
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
 </head>
 <body>
 
@@ -438,132 +543,107 @@
         </span>
     </div>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                        <th>
-				<span class="custom-checkbox">
-				<input type="checkbox" id="selectAll">
-				<label for="selectAll"></label>
-				</span>
-			</th>
-
-                        <th>Nom</th>
-                        <th>État</th>
-                        <th>Horaires</th>
-                        <th>Action</th>
-            </tr>
-        </thead>
-
-
-        <tbody>
-            <tr>
+        <table id="equipmentTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="selectAll">
+                            <label for="selectAll"></label>
+                        </span>
+                    </th>
+                    <th>Nom</th>
+                    <th>État</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="equipmentTableBody">
+                @foreach ($equipments as $equipment)
+                    <tr>
                         <td>
-				<span class="custom-checkbox">
-					<input type="checkbox" id="checkbox1" name="options[]" value="1">
-					<label for="checkbox1"></label>
-				</span>
-			</td>
-
-                    <td>Switch 1</td>
-                    <td><label class="switch">
-                            <input type="checkbox">
-                            <span class="slider round"></span>
-                        </label></td>
-                    <td><input type="time" class="form-control" id="timeInput" required></td>
-                    <td>
-			<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-			<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-			</td>
-
-            </tr>
-
-            <tr>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="checkbox{{ $equipment->id }}" name="options[]" value="{{ $equipment->id }}">
+                                <label for="checkbox{{ $equipment->id }}"></label>
+                            </span>
+                        </td>
+                        <td>{{ $equipment->name }}</td>
                         <td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="1">
-								<label for="checkbox1"></label>
-							</span>
-						</td>
-
-                    <td>Switch 2</td>
-                    <td><label class="switch">
-                            <input type="checkbox">
-                            <span class="slider round"></span>
-                        </label></td>
-                    <td><input type="time" class="form-control" id="timeInput" required></td>
-                    <td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-
-            </tr>
-
-            <tr>
+                            <label class="switch">
+                                <input type="checkbox" id="switch{{ $equipment->id }}" class="equipment-switch" data-id="{{ $equipment->id }}" @if ($equipment->etat == 1) checked @endif>
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
                         <td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="1">
-								<label for="checkbox1"></label>
-							</span>
-						</td>
+                            <a href="#editEmployeeModal{{ $equipment->id }}" class="edit" data-toggle="modal" data-id="{{ $equipment->id }}">
+                                <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                            </a>
+                            <a href="#deleteEmployeeModal{{ $equipment->id }}" class="delete" data-toggle="modal" data-id="{{ $equipment->id }}">
+                                <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                            </a>
+                        </td>
+                    </tr>
 
-                    <td>Switch 3</td>
-                    <td><label class="switch">
-                            <input type="checkbox">
-                            <span class="slider round"></span>
-                        </label></td>
-                    <td><input type="time" class="form-control" id="timeInput" required></td>
-                    <td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
+                    <!-- Modal d'édition spécifique à chaque équipement -->
+                    <div id="editEmployeeModal{{ $equipment->id }}" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form id="editForm{{ $equipment->id }}">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Éditer l'équipement</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="name{{ $equipment->id }}">Nom de l'appareil</label>
+                                            <input type="text" class="form-control" id="name{{ $equipment->id }}" name="name" value="{{ $equipment->name }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="startTime{{ $equipment->id }}">Heure de début</label>
+                                            <input type="datetime-local" class="form-control" id="startTime{{ $equipment->id }}" name="startTime" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="endTime{{ $equipment->id }}">Heure de fin</label>
+                                            <input type="datetime-local" class="form-control" id="endTime{{ $equipment->id }}" name="endTime" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                                        <button type="button" class="btn btn-info" onclick="updateEquipment({{ $equipment->id }})">Sauvegarder</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
-            </tr>
+
+                    <!-- Modal de suppression spécifique à chaque équipement -->
+                    <!-- Delete Modal HTML -->
+                    <div id="deleteEmployeeModal{{ $equipment->id }}" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form id="deleteForm{{ $equipment->id }}">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Supprimer l'équipement</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Êtes-vous sûr de vouloir supprimer cet équipement ?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                                        <button type="button" class="btn btn-danger" onclick="deleteEquipment({{ $equipment->id }})">Supprimer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                @endforeach
+            </tbody>
+
+        </table>
 
 
-            <tr>
-                        <td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="1">
-								<label for="checkbox1"></label>
-							</span>
-						</td>
-
-                    <td>Switch 4</td>
-                    <td><label class="switch">
-                            <input type="checkbox">
-                            <span class="slider round"></span>
-                        </label></td>
-                    <td><input type="time" class="form-control" id="timeInput" required></td>
-                    <td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-
-            </tr>
-
-            <tr>
-                        <td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="1">
-								<label for="checkbox1"></label>
-							</span>
-						</td>
-
-                    <td>Switch 5</td>
-                    <td><label class="switch">
-                            <input type="checkbox" id="toggle-btn">
-                            <span class="slider round"></span>
-                        </label></td>
-                    <td><input type="time" class="form-control" id="timeInput" required></td>
-                    <td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-
-            </tr>
-        </tbody>
-    </table>
     </div>
 </div>
 <div class="text-end">
@@ -575,68 +655,35 @@
         <i class="fas fa-power-off"></i>
     </button>
 </div>
-<!-- Edit Modal HTML -->
-<div id="editEmployeeModal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form>
-				<div class="modal-header">
-					<h4 class="modal-title">Edit regulation</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div class="modal-body">
-                    <div class="form-group">
-						<label>Nom appareil</label>
-						<input type="text" placeholder="Switch"   class="form-control" required>
-					</div>
-					<div class="form-group">
-                        <label>Heure de début</label>
-                        <div class="d-flex align-items-center">
-                            <input type="datetime-local" class="form-control" required>
-                            <button class="btn btn-outline-danger ml-2" type="button" id="deleteStartTime">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-					<div class="form-group">
-                        <label>Heure de début</label>
-                        <div class="d-flex align-items-center">
-                            <input type="datetime-local" class="form-control" required>
-                            <button class="btn btn-outline-danger ml-2" type="button" id="deleteStartTime">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-info" value="Save">
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<!-- Delete Modal HTML -->
-<div id="deleteModal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form>
-				<div class="modal-header">
-					<h4 class="modal-title">Delete Regulation</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div class="modal-body">
-					<p>Etes-vous sur de supprimer ?</p>
-					<!-- <p class="text-warning"><small>This action cannot be undone.</small></p> -->
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-danger" value="Delete">
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+
+<!-- À l'intérieur de votre fichier JavaScript (par exemple, custom.js) -->
+<script>
+    // Fonction pour supprimer un équipement
+    function deleteEquipment(equipmentId) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet équipement ?")) {
+            // Envoyer une requête AJAX pour supprimer l'équipement
+            $.ajax({
+                url: '/equipments/' + equipmentId, // Remplacez '/equipments/' par l'URL appropriée pour la suppression
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}', // Ajoutez le jeton CSRF
+                },
+                success: function (response) {
+                    // Mettez à jour la page ou effectuez d'autres actions nécessaires
+                    alert(response.message); // Afficher un message de confirmation
+                    // Vous pouvez recharger la page ou mettre à jour la liste d'équipements, par exemple
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Gérer les erreurs en cas d'échec de la suppression
+                    alert('Erreur lors de la suppression de l\'équipement : ' + xhr.responseText);
+                }
+            });
+        }
+    }
+</script>
+
+
 </div>
 </body>
 </html>

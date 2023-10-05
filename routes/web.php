@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\NewEquipmentController;
+use App\Http\Controllers\NewSurveillanceController;
+use App\Http\Controllers\DataGeneratorController;
+use App\Http\Controllers\AccueilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,19 +25,22 @@ Route::get('/', function () {
 // Route::get('/centrale', function () {
 //     return view('centrale');
 // });
-Route::get('/accueil', function () {
-    return view('accueil');
-});
+//Route::get('/accueil', function () {
+    //return view('accueil');
+//});
 
 Route::get('/login', function () {
     return view('login');
 });
+// Utilisez le contrôleur pour la vue "regulation"
+
 Route::get('/regulation', function () {
-    return view('regulation');
+    return redirect('/equipments');
 });
-Route::get('/Surveillance', function () {
-    return view('Surveillance');
-});
+
+//Route::get('/Surveillance', function () {
+  //  return view('Surveillance');
+//});
 
 Route::get('/historique', function () {
     return view('historique');
@@ -69,18 +75,18 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/regulation', function () {
-    return view('regulation');
-})->name('regulation');
+//Route::get('/regulation', function () {
+  //  return view('regulation');
+//})->name('regulation');
 
 
-Route::get('/accueil', function () {
-    return view('accueil');
-})->name('accueil');
+//Route::get('/accueil', function () {
+    //return view('accueil');
+//})->name('accueil');
 
-Route::get('/Surveillance', function () {
-    return view('Surveillance');
-})->name('Surveillance');
+//Route::get('/Surveillance', function () {
+  //  return view('Surveillance');
+//})->name('Surveillance');
 
 Route::get('/prediction', function () {
     return view('prediction');
@@ -97,3 +103,29 @@ Route::get('/profil', function () {
 Route::get('/notification', function () {
     return view('notification');
 })->name('notification');
+
+Route::get('/equipments', [NewEquipmentController::class, 'index'])->name('equipments');
+Route::post('/update-equipment-state', [NewEquipmentController::class, 'updateState']);
+
+
+Route::get('/generate-random-data', [DataGeneratorController::class, 'generateRandomData']);
+
+
+
+Route::get('/surveillance', [NewSurveillanceController::class, 'index'])->name('Surveillance');
+Route::get('/fetch-realtime-consumption', [NewSurveillanceController::class, 'fetchRealtimeConsumption'])->name('surveillance.fetch');
+// routes/web.php
+
+Route::get('/fetch-initial-consumption', [NewSurveillanceController::class, 'fetchInitialConsumption'])->name('surveillance.fetch.initial');
+
+//Route::get('/fetch-chart-data', 'NewSurveillanceController@fetchChartData')->name('fetch-chart-data');
+Route::get('/fetch-chart-data', [NewSurveillanceController::class, 'fetchChartData'])->name('fetch-chart-data');
+
+
+Route::get('/historique-24h', [NewSurveillanceController::class, 'show24Hours']);
+Route::get('/historique/7jours', [NewSurveillanceController::class, 'show7Days']);
+Route::get('/historique/30jours', [NewSurveillanceController::class, 'show30Days']);
+Route::get('/historique/3mois', [NewSurveillanceController::class, 'show3Months']);
+Route::get('/historique/12mois', [NewSurveillanceController::class, 'show12Months']);
+
+Route::get('/accueil', [AccueilController::class, 'index'])->name('accueil');
