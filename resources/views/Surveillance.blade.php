@@ -131,9 +131,7 @@
                             <h1 style="font-size: 19px; color: var(--primary, #1758EC);">
                                 {{ number_format($consommationTotale, 2) }} kWh
                             </h1>
-                            <h1 style="font-size: 19px; color: var(--primary, #1758EC);">
-                                {{ number_format($consommationTotale *88) }} FCFA
-                            </h1>
+                    
                         </div>
                     </div>
                     <div class="alert">

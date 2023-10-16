@@ -112,9 +112,6 @@
                             <h1>
                                 {{ number_format($consommationTotale, 2) }} kWh
                             </h1>
-                            <h1>
-                                {{ number_format($consommationTotale * 88) }} FCFA
-                            </h1>
                         </div>
 
                     </div>

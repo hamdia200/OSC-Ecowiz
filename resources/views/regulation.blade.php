@@ -451,7 +451,7 @@
 
                     // Envoyer une demande POST à l'ESP32 pour mettre à jour son état
                     $.ajax({
-                        url: 'http://192.168.137.6/', // URL de l'ESP32 pour mettre à jour l'état
+                        url: 'http://192.168.43.89/', // URL de l'ESP32 pour mettre à jour l'état
                         method: 'POST',
                         data: {
                             equipmentId: equipmentId,
@@ -500,7 +500,7 @@
 
                         // Envoyez une demande POST à l'ESP32 pour mettre à jour son état
                         $.ajax({
-                            url: 'http://192.168.137.6/',
+                            url: 'http://192.168.43.89/',
                             method: 'POST',
                             data: {
                                 equipmentId: equipmentId,
@@ -600,10 +600,14 @@
                                         <div class="form-group">
                                             <label for="startTime{{ $equipment->id }}">Heure de début</label>
                                             <input type="datetime-local" class="form-control" id="startTime{{ $equipment->id }}" name="startTime" required>
+                                            <input type="checkbox" id="deleteStartTime{{ $equipment->id }}" name="deleteStartTime" value="1">
+                                            <label for="deleteStartTime{{ $equipment->id }}">Supprimer l'heure de début</label>
                                         </div>
                                         <div class="form-group">
                                             <label for="endTime{{ $equipment->id }}">Heure de fin</label>
                                             <input type="datetime-local" class="form-control" id="endTime{{ $equipment->id }}" name="endTime" required>
+                                            <input type="checkbox" id="deleteEndTime{{ $equipment->id }}" name="deleteEndTime" value="1">
+                                            <label for="deleteEndTime{{ $equipment->id }}">Supprimer l'heure de fin</label>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -682,6 +686,57 @@
         }
     }
 </script>
+
+<script>
+    // Fonction pour mettre à jour l'équipement
+        function updateEquipment(equipmentId) {
+        var newName = $("#name" + equipmentId).val();
+        var newStartTime = $("#startTime" + equipmentId).val();
+        var newEndTime = $("#endTime" + equipmentId).val();
+
+            // Vérifiez si les cases à cocher de suppression sont cochées
+        var deleteStartTime = $("#deleteStartTime" + equipmentId).is(":checked");
+        var deleteEndTime = $("#deleteEndTime" + equipmentId).is(":checked");
+
+        // Si les cases à cocher sont cochées, définissez les valeurs sur vide
+        if (deleteStartTime) {
+            newStartTime = "";
+        }
+        if (deleteEndTime) {
+            newEndTime = "";
+        }
+
+        // Vérifiez si les champs requis sont vides
+        if (!newName || !newStartTime || !newEndTime) {
+            alert("Veuillez remplir tous les champs requis.");
+            return;
+        }
+        
+        // Envoyer une requête AJAX pour mettre à jour l'équipement
+        $.ajax({
+            url: '/equipments/' + equipmentId, // Remplacez '/equipments/' par l'URL appropriée pour la mise à jour
+            type: 'PUT', // Utilisez la méthode PUT pour la mise à jour
+            data: {
+                _token: '{{ csrf_token() }}', // Ajoutez le jeton CSRF
+                name: newName,
+                startTime: newStartTime,
+                endTime: newEndTime
+            },
+            success: function (response) {
+                // Mettez à jour la page ou effectuez d'autres actions nécessaires
+                alert(response.message); // Afficher un message de confirmation
+                // Vous pouvez recharger la page ou mettre à jour la liste d'équipements, par exemple
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                // Gérer les erreurs en cas d'échec de la mise à jour
+                alert('Erreur lors de la mise à jour de l\'équipement : ' + xhr.responseText);
+            }
+        });
+    }
+
+</script>
+
 
 
 </div>
